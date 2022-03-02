@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+
 import './App.css';
+import styled from 'styled-components';
+import {Routes, Route} from "react-router-dom";
+import Dashboard from './views/dashboard';
+import Publish from './views/publish';
+import Support from './views/support';
+import Onsite from './views/onSite';
+import Header from './components/header';
+
+const WorkSpace = styled.div`
+display:flex;
+`
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header/>
+      <WorkSpace>
+        <Routes>
+          <Route path="/publish" element={<Publish />}/>
+          <Route path="/support" element={<Support />}/>
+          <Route path="/onsite" element={<Onsite />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route
+            path="*"
+            element={<Dashboard to="/" />}
+          />
+        </Routes>
+      </WorkSpace>
     </div>
   );
 }
