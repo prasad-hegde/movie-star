@@ -7,14 +7,32 @@ import Publish from './views/publish';
 import Support from './views/support';
 import Onsite from './views/onSite';
 import Header from './components/header';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
+const Container = styled.div`
+display:flex;
+flex-direction:column;
+height:100%;
+color:#ffffff;
+`
 const WorkSpace = styled.div`
 display:flex;
+flex-grow: 1;
+flex-direction: column;
+overflow-y: auto;
 `
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
 
 function App() {
   return (
-    <div className="App">
+  <ThemeProvider theme={darkTheme}>
+    <Container>
       <Header/>
       <WorkSpace>
         <Routes>
@@ -28,7 +46,8 @@ function App() {
           />
         </Routes>
       </WorkSpace>
-    </div>
+    </Container>
+  </ThemeProvider>
   );
 }
 
