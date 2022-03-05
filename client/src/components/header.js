@@ -3,7 +3,9 @@ import Logo from '../assets/icons/logo';
 
 const LogContainer = styled.div`
 display:flex;
-margin: 0 2rem;`
+margin: 0 2rem;
+width: 8rem;
+`
 
 const Container = styled.div`
 display:flex;
