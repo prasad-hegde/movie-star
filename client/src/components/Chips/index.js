@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { FormHelperText } from '@mui/material';
 import { FormElement } from "../../commonStyle";
 
 const Container = styled.div`
@@ -21,13 +22,31 @@ font-weight:${({active})=>active?'bold':''};
     color:#ffffff;
 }
 `
-export default function Chips({ options }) {
+export default function Chips({ options,onChange,submitFlag,hasError,required }) {
     const [selected, setSelection] = useState('');
+    const [error, setError] = useState(false);
+    
     function handleClick(value) {
         setSelection(value);
+        onChange(value);
+        setError(false);
     }
+
+    useEffect(() => {
+        if (submitFlag) {
+            if (required && !selected) {
+                setError(true);
+            }
+        }
+    }, [submitFlag])
+
+    useEffect(() => {
+        hasError(error);
+    },[error])
+
+
     return (
-        <FormElement>
+        <FormElement style={{flexDirection:'column'}}>
             <Container>
                 {options.map((item,i) => (
                     <Chip key={i}
@@ -38,6 +57,7 @@ export default function Chips({ options }) {
                     </Chip>
                 ))}
             </Container>
+            <FormHelperText error={error}>{error ? 'This is a required field' : ''}</FormHelperText>
         </FormElement>
     )
 }

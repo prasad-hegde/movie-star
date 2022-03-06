@@ -132,7 +132,7 @@ export const languages = [
   {label:'Kannada',value:'Kannada'},
   {label:'Hindi',value:'Hindi'},
 ]
-export const dimension = [
+export const dimensions = [
   { label: '2D', value: '2D' },
   { label:'3D',value:'3D'},
 ]

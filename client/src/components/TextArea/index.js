@@ -1,6 +1,7 @@
 import TextField from '@mui/material/TextField';
-import {useState } from 'react';
+import {useEffect, useState } from 'react';
 import { FormElement } from '../../commonStyle';
+
 
 const textFormat = {
     hhmm: {
@@ -18,16 +19,18 @@ const textFormat = {
 }
 
 export default function TextArea(props) {
-    
     const { label = "label",
         multiline = false, format = 'default',
-        required = false } = props;
+        required = false ,onChange,value, submitFlag,hasError} = props;
     
-    const [value, setValue] = useState('');
     const [error, setError] = useState(false);
     const [helperText, setHelperText] = useState('');
 
+
     function validate() {
+        if (!required && !textFormat[format]) {
+            return;
+        }
         if (!value && required) {
             setError(true);
             setHelperText(textFormat.required.errorText)
@@ -48,8 +51,22 @@ export default function TextArea(props) {
         }
     }
 
-    function handleOnChange(value) {
-        setValue(value);
+    useEffect(() => {
+        if (!required) {
+            return;
+        }
+        if (submitFlag) {
+            validate();
+        }
+    }, [submitFlag])
+    
+    useEffect(() => {
+        hasError(error);
+    },[error])
+    
+   
+    function handleOnChange(val) {
+        onChange(val)
     }
     
     return (
