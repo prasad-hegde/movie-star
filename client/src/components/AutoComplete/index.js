@@ -5,7 +5,7 @@ import { FormHelperText } from '@mui/material';
 import { FormElement } from '../../commonStyle';
 
 
-export default function AutoComplete({ options, label,multiple=false,value,onChange ,submitFlag,hasError,required}) {
+export default function AutoComplete({ options, label,multiple=false,value,onChange ,submitFlag=false,hasError=false,required=false}) {
   const [error, setError] = useState(false);
 
   function validate() {
@@ -25,8 +25,11 @@ export default function AutoComplete({ options, label,multiple=false,value,onCha
     }
 }, [submitFlag])
 
-useEffect(() => {
-    hasError(error);
+  useEffect(() => {
+    if (hasError) {
+      hasError(error);
+  }
+   
 },[error])
 
   return (

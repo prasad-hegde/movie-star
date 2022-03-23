@@ -1,4 +1,10 @@
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
+import banner1 from './assets/images/banner1.png';
+import banner2 from './assets/images/banner2.png';
+import banner3 from './assets/images/banner3.png';
+import banner4 from './assets/images/banner4.png';
+
+
 export const top100Films = [
     { title: 'The Shawshank Redemption', year: 1994 },
     { title: 'The Godfather', year: 1972 },
@@ -135,4 +141,26 @@ export const languages = [
 export const dimensions = [
   { label: '2D', value: '2D' },
   { label:'3D',value:'3D'},
+]
+
+export const movieList = [
+  { id:'12',title: 'Terminator 2: Judgment Day', genre: 'action' },
+  { id:'12',title: 'title2', genre: 'drama' },
+  { id:'12',title: 'title3', genre: 'romcom' },
+  { id:'12',title: 'title4', genre: 'thriller' },
+  { id:'12',title: 'title5', genre: 'comedy' },
+  { id:'12',title: 'title6', genre: 'action' },
+  {id:'12',title:'title7',genre:'comedy'},
+  { id:'12',title: 'title8', genre: 'drama' },
+  {id:'12',title:'title9',genre:'comedy'},
+  { id:'12',title: 'title10', genre: 'drama' },
+  {id:'12',title:'title11',genre:'comedy'},
+  { id:'12',title: 'title12', genre: 'drama' },
+]
+
+export const bannerList = [
+  { image: banner1 },
+  { image: banner2 },
+  { image: banner3 },
+  {image:banner4},
 ]
