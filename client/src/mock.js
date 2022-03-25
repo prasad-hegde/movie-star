@@ -144,18 +144,18 @@ export const dimensions = [
 ]
 
 export const movieList = [
-  { id:'12',title: 'Terminator 2: Judgment Day', genre: 'action' },
+  { id:'11',title: 'Terminator 2: Judgment Day', genre: 'action' },
   { id:'12',title: 'title2', genre: 'drama' },
-  { id:'12',title: 'title3', genre: 'romcom' },
-  { id:'12',title: 'title4', genre: 'thriller' },
-  { id:'12',title: 'title5', genre: 'comedy' },
-  { id:'12',title: 'title6', genre: 'action' },
-  {id:'12',title:'title7',genre:'comedy'},
-  { id:'12',title: 'title8', genre: 'drama' },
-  {id:'12',title:'title9',genre:'comedy'},
-  { id:'12',title: 'title10', genre: 'drama' },
-  {id:'12',title:'title11',genre:'comedy'},
-  { id:'12',title: 'title12', genre: 'drama' },
+  { id:'13',title: 'title3', genre: 'romcom' },
+  { id:'14',title: 'title4', genre: 'thriller' },
+  { id:'15',title: 'title5', genre: 'comedy' },
+  { id:'16',title: 'title6', genre: 'action' },
+  {id:'17',title:'title7',genre:'comedy'},
+  { id:'18',title: 'title8', genre: 'drama' },
+  {id:'19',title:'title9',genre:'comedy'},
+  { id:'20',title: 'title10', genre: 'drama' },
+  {id:'21',title:'title11',genre:'comedy'},
+  { id:'22',title: 'title12', genre: 'drama' },
 ]
 
 export const bannerList = [
@@ -164,3 +164,14 @@ export const bannerList = [
   { image: banner3 },
   {image:banner4},
 ]
+
+export const movieDetails = {
+  name:'KGF:Chapter 2',
+  synopsis:'The blood-soaked land of Kolar Gold Fields (KGF) has a new overlord now - Rocky, whose name strikes fear in the heart of his foes. His allies look up to Rocky as their saviour, the government sees him as a threat to law and order; enemies are clamouring for revenge and conspiring for his downfall. Bloodier battles and darker days await as Rocky continues on his quest for unchallenged supremacy.',
+  language:'Kannada',
+  dimension:'2D',
+  runTime:'2h 20min',
+  genre:'Action, Drama, Period',
+  locations:'Bloomington, Indianapolis',
+  theatres:'AMC 12'
+}

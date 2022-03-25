@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {useNavigate } from "react-router-dom";
 import { MovieCard } from "../commonStyle";
 import { colors } from "../pallette";
 
@@ -39,9 +40,11 @@ margin: 1rem 1rem;
 `
 
 export default function MovieList({ list }) {
+    let navigate = useNavigate();
 
     function handleMovieClick(movie) {
-        alert(movie.id+':'+movie.title);
+        navigate(`movies/${movie.id}`);
+        // alert(movie.id+':'+movie.title);
     }
     return (
         <Container>
