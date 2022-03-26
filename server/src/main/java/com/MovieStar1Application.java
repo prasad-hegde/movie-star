@@ -19,8 +19,7 @@ public class MovieStar1Application {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				
-				registry.addMapping("users").allowedOrigins("https://webserver-movie-star.herokuapp.com");
-				registry.addMapping("movies").allowedOrigins("https://webserver-movie-star.herokuapp.com");
+				registry.addMapping("/*").allowedOrigins("*");
 			}
 		};
 	}
