@@ -10,9 +10,9 @@ const ColorButton = styled(MUIButton)(({ theme }) => ({
     }
 }));
 
-export default function Button({label,onClick}) {
+export default function Button({label,onClick,disabled=false}) {
     return (
-        <ColorButton variant="contained" onClick={onClick}>
+        <ColorButton disabled={disabled} variant="contained" onClick={onClick}>
             {label}
         </ColorButton>
     );

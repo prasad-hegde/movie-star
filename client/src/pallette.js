@@ -4,5 +4,6 @@ export const colors = {
     mattBlack: '#122430',
     transBlack:'#122430d6',
     grey: '#707C83',
+    browny:'#4c2d36'
     
 }

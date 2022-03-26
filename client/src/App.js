@@ -9,7 +9,8 @@ import Onsite from './views/onSite';
 import Header from './components/header';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScrollContainer } from './components/ScrollContainer';
-import PlayGround from './views/playground';
+import PlayGround from './views/seatLayout';
+import SeatLayoutPage from './views/seatLayout';
 
 const Container = styled.div`
 display:flex;
@@ -43,7 +44,7 @@ function App() {
               <Route path="/publish" element={<Publish />}/>
               <Route path="/support" element={<Support />}/>
               <Route path="/onsite" element={<Onsite />} />
-              <Route path="/play" element={<PlayGround />} />
+              <Route path={`/selectSeats/:count`} element={<SeatLayoutPage />} />
               <Route path="/" element={<Dashboard />} />
               <Route
                 path="*"

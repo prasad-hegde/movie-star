@@ -1,4 +1,4 @@
-import {useParams } from "react-router-dom";
+import {useParams,useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FormElement, MovieCard } from "../commonStyle";
 import { movieDetails } from "../mock";
@@ -6,16 +6,13 @@ import samplePoster from '../assets/images/samplePoster.png';
 import { colors } from "../pallette";
 import Button from "./Button";
 
-//background-image: linear-gradient(90deg, rgb(34, 34, 34) 24.97%, rgb(34, 34, 34) 38.3%, rgba(34, 34, 34, 0.04) 97.47%, rgb(34, 34, 34) 100%),url(${samplePoster})
-
-const OneCard = () => {
+export const OneCard = ({movieId}) => {
     const CardHolder = styled.div`
     height: 25rem;
     width: 18rem;
     `
     const Container = styled.div`
     display:flex;
-    width:100%;
     padding: 0 2.5rem;
     background-size: cover;
     background-image:linear-gradient(#eb01a500,#eb01a500,#10242f),url(${samplePoster});
@@ -44,10 +41,12 @@ const OneCard = () => {
     border-radius: 0.2rem;
     font-weight: 700;
     width: fit-content;
+    text-transform:uppercase;
     `
     const Plain = styled.div`
     margin: 0.5rem 0;
     `
+    const navigate = useNavigate();
     return (
         <Container>
             <CardHolder>
@@ -61,7 +60,7 @@ const OneCard = () => {
                     <Plain>{`${movieDetails.runTime} ☉ ${movieDetails.genre}`}</Plain>
                 </Details>
                 <FormElement>
-                    <Button style={{}} label="Book Tickets" position="end" onClick={()=>'onbook'}/>
+                    <Button label="Book Tickets" position="end" onClick={()=>navigate(`/movies/select-show/${movieId}`)}/>
                 </FormElement>
             </DetailsWrap>
         </Container>
@@ -86,11 +85,13 @@ export default function MoviePreview() {
     const Details = styled.div`
     
     `
-    return (<Container>
-        <OneCard></OneCard>
-        <About>
-            <Title>About the movie</Title>
-            <Details>{movieDetails.synopsis}</Details>
-        </About>
-    </Container>)
+    return (
+        <Container>
+            <OneCard movieId={params.movieId}></OneCard>
+            <About>
+                <Title>About the movie</Title>
+                <Details>{movieDetails.synopsis}</Details>
+            </About>
+        </Container>
+    )
 }

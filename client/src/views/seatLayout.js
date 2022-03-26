@@ -145,7 +145,7 @@ function SeatLayout({reserved}) {
     
 }
 
-export default function PlayGround() {
+export default function SeatLayoutPage() {
     const reserved = ['A8', 'A9', 'A10'];
     return (<Canvas><SeatLayout reserved={reserved}/></Canvas>)
 }

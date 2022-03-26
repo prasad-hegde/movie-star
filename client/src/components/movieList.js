@@ -2,6 +2,8 @@ import styled from "styled-components";
 import {useNavigate } from "react-router-dom";
 import { MovieCard } from "../commonStyle";
 import { colors } from "../pallette";
+import { useEffect } from "react";
+const axios = require('axios');
 
 const Container = styled.div`
 display:flex;
@@ -46,6 +48,18 @@ export default function MovieList({ list }) {
         navigate(`movies/${movie.id}`);
         // alert(movie.id+':'+movie.title);
     }
+
+    useEffect(() => {
+        axios.get('https://movie-star-server.herokuapp.com/movie/all', {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        })
+        .then(function (response) {
+          // handle success
+          console.log(response);
+        })
+    })
     return (
         <Container>
             <Header>

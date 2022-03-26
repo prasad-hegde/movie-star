@@ -1,0 +1,1 @@
+const domain = 'https://movie-star-server.herokuapp.com/movie/all';

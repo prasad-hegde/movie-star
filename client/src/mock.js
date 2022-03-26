@@ -175,3 +175,6 @@ export const movieDetails = {
   locations:'Bloomington, Indianapolis',
   theatres:'AMC 12'
 }
+export const theatres = ['AMC CLASSIC Bloomington 11', 'AMC CLASSIC Bloomington 12', 'AMC CLASSIC Bloomington 13', 'AMC CLASSIC Bloomington 14','AMC CLASSIC Bloomington 15','AMC CLASSIC Bloomington 16'];
+
+export const showTime = ['1:30 PM', '4:30PM', '5:15 PM', '7:30 PM', '8:30 PM'];
