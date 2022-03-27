@@ -49,17 +49,17 @@ export default function MovieList({ list }) {
         // alert(movie.id+':'+movie.title);
     }
 
-    useEffect(() => {
-        axios.get('https://movie-star-server.herokuapp.com/movie/all', {
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
-        .then(function (response) {
-          // handle success
-          console.log(response);
-        })
-    })
+    // useEffect(() => {
+    //     axios.get('https://movie-star-server.herokuapp.com/movie/all', {
+    //         headers: {
+    //             'Access-Control-Allow-Origin': '*'
+    //         }
+    //     })
+    //     .then(function (response) {
+    //       // handle success
+    //       console.log(response);
+    //     })
+    // })
     return (
         <Container>
             <Header>
