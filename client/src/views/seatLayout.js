@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import SeatIcon from "../assets/icons/seat"
 import Button from "../components/Button"
@@ -85,6 +86,8 @@ function SeatLayout({reserved}) {
     // 1 -> selected
     // -1 -> reserved
    
+    const params = useParams();
+
     const d = 16;
     const alpha = Array.from(Array(12)).map((_e, i) => i + 65);
     const alphabets = alpha.map((x) => String.fromCharCode(x));
@@ -101,7 +104,10 @@ function SeatLayout({reserved}) {
 
     function handleSelect(row,colIndex) {
         const tempLayout = { ...layOut };
-        if (tempLayout[row][colIndex] === -1) {
+        if (tempLayout[row][colIndex] === -1 ) {
+            return;
+        }
+        if (params.count == seatCount && tempLayout[row][colIndex] != 1) {
             return;
         }
         tempLayout[row][colIndex] = Number(!tempLayout[row][colIndex]);
@@ -124,7 +130,7 @@ function SeatLayout({reserved}) {
                 ))}
             </Floor>
             <SeatLegends>
-                {seatCount>0 ?
+                {seatCount==params.count ?
                     (<ButtonWrap>
                         <Button label={`Book Tickets (${seatCount})`} onClick={() => ''} />
                     </ButtonWrap>) :
