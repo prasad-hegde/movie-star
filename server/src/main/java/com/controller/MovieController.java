@@ -39,7 +39,6 @@ public class MovieController {
 	
 	//find movies using keyword
 	@GetMapping("/findAll")
-	@CrossOrigin
 	public List<Movie> findEvents(Model model, @Param("keyword") String keyword){
 	    List<Movie> listMovies = movieService.findAllMovies(keyword);
 	   
