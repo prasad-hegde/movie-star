@@ -34,7 +34,6 @@
       "react-app/jest"
     ]
   },
-  "proxy": "https://movie-star-server.herokuapp.com",
   "browserslist": {
     "production": [
       ">0.2%",
