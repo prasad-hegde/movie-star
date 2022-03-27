@@ -28,6 +28,7 @@ public class MovieController {
 	
 	//publish movies
 	@PostMapping(value="/publish")
+	@CrossOrigin
 	public Status addMovie(@Valid @RequestBody Movie movie) throws IOException 
 	{ 
 		System.out.print("inside publish movie");
@@ -38,6 +39,7 @@ public class MovieController {
 	
 	//find movies using keyword
 	@GetMapping("/findAll")
+	@CrossOrigin
 	public List<Movie> findEvents(Model model, @Param("keyword") String keyword){
 	    List<Movie> listMovies = movieService.findAllMovies(keyword);
 	   
@@ -50,8 +52,9 @@ public class MovieController {
 	
 	//get all movies
 	@GetMapping(value = "/all")
-    public ResponseEntity getAllEvents() {
-        return ResponseEntity.ok(movieService.listAllMovies());
-    }
+	@CrossOrigin
+    	public ResponseEntity getAllEvents() {
+        	return ResponseEntity.ok(movieService.listAllMovies());
+    	}
 	
 }
