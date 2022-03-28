@@ -33,16 +33,16 @@ public class Movie {
 	@Column(name="synopsis" , length = 2000)
     private String synopsis;
 	
-	@Column(name="language", length = 15)
+	@Column(name="language", length = 100)
     private String language;
 	
-	@Column(name="type", length = 8)
+	@Column(name="type", length = 20)
     private String type;
 	
-	@Column(name="runtime", length = 8)
+	@Column(name="runtime", length = 18)
     private String runtime;
 
-    @Column(name="genre", length = 20)
+    @Column(name="genre", length = 200)
     private String genre;
     
     
