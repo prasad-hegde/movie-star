@@ -20,6 +20,7 @@
     "react-scripts": "5.0.0",
     "react-scroll-percentage": "^4.2.0",
     "react-spinners": "^0.11.0",
+    "redux": "^4.1.2",
     "styled-components": "^5.3.3",
     "web-vitals": "^2.1.4"
   },
@@ -46,5 +47,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }
