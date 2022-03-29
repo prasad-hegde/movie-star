@@ -36,10 +36,10 @@ public class Movie {
 	@Column(name="language", length = 100)
     private String language;
 	
-	@Column(name="type", length = 20)
+	@Column(name="type", length = 30)
     private String type;
 	
-	@Column(name="runtime", length = 18)
+	@Column(name="runtime", length = 8)
     private String runtime;
 
     @Column(name="genre", length = 200)
@@ -55,6 +55,8 @@ public class Movie {
     private String[] theatres;
 //        private String theatres;
     
+    @Column(name="image" , length = 1000 , nullable = true)
+    private String image;
     
     public String[] getLocations() {
         return locations;
@@ -74,5 +76,14 @@ public class Movie {
         this.theatres = theatres;
     }
     
+    /*public byte[] getImage(byte[] image) {
+    	
+    	return image;
+    }
+    
+    public void setImage(byte[] image) {
+    	
+    	this.image = image;
+    }*/
     
 }
