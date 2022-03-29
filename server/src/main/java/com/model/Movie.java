@@ -33,16 +33,16 @@ public class Movie {
 	@Column(name="synopsis" , length = 2000)
     private String synopsis;
 	
-	@Column(name="language", length = 15)
+	@Column(name="language", length = 100)
     private String language;
 	
-	@Column(name="type", length = 8)
+	@Column(name="type", length = 30)
     private String type;
 	
 	@Column(name="runtime", length = 8)
     private String runtime;
 
-    @Column(name="genre", length = 20)
+    @Column(name="genre", length = 200)
     private String genre;
     
     
@@ -55,6 +55,8 @@ public class Movie {
     private String[] theatres;
 //        private String theatres;
     
+    @Column(name="image" , length = 10485760 , nullable = true)
+    private String image;
     
     public String[] getLocations() {
         return locations;
@@ -74,5 +76,22 @@ public class Movie {
         this.theatres = theatres;
     }
     
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
+    /*public byte[] getImage(byte[] image) {
+    	
+    	return image;
+    }
+    
+    public void setImage(byte[] image) {
+    	
+    	this.image = image;
+    }*/
     
 }

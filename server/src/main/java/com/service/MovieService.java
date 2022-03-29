@@ -1,10 +1,12 @@
 package com.service;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.exceptions.MovieNotFoundException;
 import com.model.Movie;
 import com.repository.MovieRepository;
 
@@ -31,8 +33,19 @@ public class MovieService {
        
     }
     
+    public Movie getMovieById(Long id) throws MovieNotFoundException{
+
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (movie.isPresent()) {
+            return movie.get();
+        }
+		else{	
+			throw new MovieNotFoundException("Movie not found"); 
+		}	 
+        
+    }
    
-    
+ 
     public List<Movie> listAllMovies() {
         return movieRepository.findAll();
     }
