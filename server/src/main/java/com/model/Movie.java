@@ -55,7 +55,7 @@ public class Movie {
     private String[] theatres;
 //        private String theatres;
     
-    @Column(name="image" , length = 1000 , nullable = true)
+    @Column(name="image" , length = 10485760, nullable = true)
     private String image;
     
     public String[] getLocations() {
