@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class MovieController {
 	}
 
 
-	// find movies using keyword
+	//find movies using keyword
 	@GetMapping("/findAll")
 	public List<Movie> findMovies(Model model, @Param("keyword") String keyword) {
 		List<Movie> listMovies = movieService.findAllMovies(keyword);
@@ -58,10 +59,16 @@ public class MovieController {
 
 	}
 
-	// get all movies
+	//get all movies
 	@GetMapping(value = "/all")
 	public ResponseEntity getAllEvents() {
 		return ResponseEntity.ok(movieService.listAllMovies());
 	}
+	
+	//find movie by id
+	@GetMapping(value = "/{id}")
+    public ResponseEntity getEventById(@PathVariable("id") Long id) throws Exception {
+        return ResponseEntity.ok(movieService.getMovieById(id));
+    }
 
 }

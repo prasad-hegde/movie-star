@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.exception.UserNotFoundException;
+import com.exceptions.UserNotFoundException;
 import com.model.User;
 import com.repository.UserRepository;
 
