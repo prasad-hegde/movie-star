@@ -1,15 +1,18 @@
 import { Route, Routes } from "react-router-dom";
+import { getAllMovies } from "../api";
 import Carousel from "../components/Carousel";
 import MoviePreview from "../components/movieDetails";
 import MovieList from "../components/movieList";
 import ShowSelection from "../components/selectShow";
-import { bannerList, movieList } from "../mock";
+import useFetch from "../hooks/useFetch";
+import { bannerList } from "../mock";
 
 
 
 export default function Dashboard() {
-    return (
 
+    const { data: movieList, loading:moviesLoading, error:moviesError } = useFetch(getAllMovies());
+    return (
         <Routes>
             <Route
                 path="movies/:movieId"
@@ -23,7 +26,7 @@ export default function Dashboard() {
                 path="/"
                 element={ <>
                     <Carousel options={bannerList} ></Carousel>
-                    <MovieList list={movieList}></MovieList>
+                    <MovieList list={movieList} loading={moviesLoading} error={moviesError}></MovieList>
                 </>}
             />
         </Routes>

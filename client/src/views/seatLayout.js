@@ -1,10 +1,12 @@
 import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import SeatIcon from "../assets/icons/seat"
 import Button from "../components/Button"
 import {colors} from "../pallette"
 import { fromAlphNum } from "../utils"
+import { useDispatch} from 'react-redux'
+import { ACTIONS } from "../redux/actions"
 
 const Canvas = styled.div`
 width:100%;
@@ -88,6 +90,10 @@ function SeatLayout({reserved}) {
    
     const params = useParams();
 
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
     const d = 16;
     const alpha = Array.from(Array(12)).map((_e, i) => i + 65);
     const alphabets = alpha.map((x) => String.fromCharCode(x));
@@ -110,10 +116,24 @@ function SeatLayout({reserved}) {
         if (params.count == seatCount && tempLayout[row][colIndex] != 1) {
             return;
         }
+
         tempLayout[row][colIndex] = Number(!tempLayout[row][colIndex]);
         const increment= Number(tempLayout[row][colIndex])===0?-1:1
         setSeatCount(seatCount+increment);
         setLayout(tempLayout);
+    }
+
+    function handleBook() {
+        const payload = [];
+        Object.keys(layOut).forEach(row => {
+            layOut[row].forEach((status,index) => {
+                if (status === 1) {
+                    payload.push(row + (index + 1));
+                }
+            })
+        })
+        dispatch({ type: ACTIONS.SET_SEAT_DETAILS, payload });
+        navigate('/book');
     }
 
     return (
@@ -132,7 +152,7 @@ function SeatLayout({reserved}) {
             <SeatLegends>
                 {seatCount==params.count ?
                     (<ButtonWrap>
-                        <Button label={`Book Tickets (${seatCount})`} onClick={() => ''} />
+                        <Button label={`Book Tickets (${seatCount})`} onClick={handleBook} />
                     </ButtonWrap>) :
                 (<>
                     <Seat state={1} size='small'/>

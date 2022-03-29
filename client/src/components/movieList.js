@@ -2,8 +2,8 @@ import styled from "styled-components";
 import {useNavigate } from "react-router-dom";
 import { MovieCard } from "../commonStyle";
 import { colors } from "../pallette";
-import { useEffect } from "react";
-const axios = require('axios');
+import Spinner from "./Spinner";
+import Error from "./Error";
 
 const Container = styled.div`
 display:flex;
@@ -18,6 +18,7 @@ font-weight: 700;
 font-size:1.2rem;
 `
 const Subtitle = styled(Text)`
+padding-top:0.5rem;
 color:${colors.grey}
 `
 const Header = styled.div`
@@ -40,26 +41,21 @@ cursor:pointer;
 const Details = styled.div`
 margin: 1rem 1rem;
 `
+const Image = styled.img`
+width: 100%;
+height: 100%;
+`
 
-export default function MovieList({ list }) {
+export default function MovieList({ list,loading,error }) {
     let navigate = useNavigate();
 
     function handleMovieClick(movie) {
-        navigate(`movies/${movie.id}`);
+        navigate(`movies/${movie.movie_id}`);
         // alert(movie.id+':'+movie.title);
     }
 
-    // useEffect(() => {
-    //     axios.get('https://movie-star-server.herokuapp.com/movie/all', {
-    //         headers: {
-    //             'Access-Control-Allow-Origin': '*'
-    //         }
-    //     })
-    //     .then(function (response) {
-    //       // handle success
-    //       console.log(response);
-    //     })
-    // })
+    if (loading) return <Spinner loading={loading} color={'white'} /> 
+    if (error) return <Error/>
     return (
         <Container>
             <Header>
@@ -68,7 +64,7 @@ export default function MovieList({ list }) {
             <Body>
                 {list.map(movie => (
                     <CardWrap onClick={()=>handleMovieClick(movie)}>
-                        <MovieCard></MovieCard>
+                        <MovieCard><Image src={movie.image}></Image></MovieCard>
                         <Details>
                             <Title>{movie.title}</Title>
                             <Subtitle>{movie.genre}</Subtitle>

@@ -2,20 +2,36 @@ import {useParams,useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FormElement, MovieCard } from "../commonStyle";
 import { movieDetails } from "../mock";
-import samplePoster from '../assets/images/samplePoster.png';
 import { colors } from "../pallette";
 import Button from "./Button";
+import useFetch from "../hooks/useFetch";
+import { getAmovie } from "../api";
+import Spinner from "./Spinner";
 
-export const OneCard = ({movieId}) => {
+export const OneCard = ({data}) => {
     const CardHolder = styled.div`
     height: 25rem;
     width: 18rem;
+    z-index:1;
     `
     const Container = styled.div`
     display:flex;
+    position:relative;
     padding: 0 2.5rem;
+    // background-size: cover;
+    // background-position-y: -100%;
+    // background-image:linear-gradient(#eb01a500,#eb01a500,#10242f),url(${data.image});
+    `
+    const Backgrond = styled.div`
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    filter: blur(5px);
     background-size: cover;
-    background-image:linear-gradient(#eb01a500,#eb01a500,#10242f),url(${samplePoster});
+    background-position-y: -100%;
+    background-image:linear-gradient(#eb01a500,#eb01a500,#10242f),url(${data.image});
     `
     const DetailsWrap = styled.div`
     display:flex;
@@ -23,6 +39,7 @@ export const OneCard = ({movieId}) => {
     margin: 1rem;
     padding: 1.5rem 0;
     flex: 1;
+    z-index: 1;
     `
     const Title = styled.div`
     font-size:2rem;
@@ -46,21 +63,26 @@ export const OneCard = ({movieId}) => {
     const Plain = styled.div`
     margin: 0.5rem 0;
     `
+    const Image = styled.img`
+    width: 100%;
+    height: 100%;
+    `
     const navigate = useNavigate();
     return (
         <Container>
+            <Backgrond></Backgrond>
             <CardHolder>
-                <MovieCard fullHeight url={samplePoster}></MovieCard>
+                <MovieCard fullHeight><Image src={data.image}/></MovieCard>
             </CardHolder>   
             <DetailsWrap>
-                <Title>{movieDetails.name}</Title>
+                <Title>{data.title}</Title>
                 <Details>
-                    <Chip>{movieDetails.language}</Chip>
-                    <Chip>{movieDetails.dimension}</Chip>
-                    <Plain>{`${movieDetails.runTime} ☉ ${movieDetails.genre}`}</Plain>
+                    <Chip>{data.language}</Chip>
+                    <Chip>{data.type}</Chip>
+                    <Plain>{`${data.runtime} ☉ ${movieDetails.genre}`}</Plain>
                 </Details>
                 <FormElement>
-                    <Button label="Book Tickets" position="end" onClick={()=>navigate(`/movies/select-show/${movieId}`)}/>
+                    <Button label="Book Tickets" position="end" onClick={()=>navigate(`/movies/select-show/${data.movie_id}`)}/>
                 </FormElement>
             </DetailsWrap>
         </Container>
@@ -85,9 +107,13 @@ export default function MoviePreview() {
     const Details = styled.div`
     
     `
+
+    const { data: movieDetails, loading, error } = useFetch(getAmovie(params.movieId));
+
+    if (loading) return <Spinner  color={'white'}></Spinner>;
     return (
         <Container>
-            <OneCard movieId={params.movieId}></OneCard>
+            <OneCard data={movieDetails}></OneCard>
             <About>
                 <Title>About the movie</Title>
                 <Details>{movieDetails.synopsis}</Details>

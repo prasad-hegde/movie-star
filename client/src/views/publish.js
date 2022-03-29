@@ -1,6 +1,6 @@
 import AutoComplete from "../components/AutoComplete";
 import styled from "styled-components";
-import { dimensions, languages, top100Films } from "../mock";
+import { dimensions, languages, popularLocations, theatreChains } from "../mock";
 import TextArea from "../components/TextArea";
 import Chips from "../components/Chips";
 import { FormElement } from "../commonStyle";
@@ -9,6 +9,8 @@ import { useState } from "react";
 import Confirmation from "./confirmation";
 import Spinner from "../components/Spinner";
 import Fade from '@mui/material/Fade';
+import { publishMovie } from "../api";
+import UploadImage from "../components/UploadImage";
 
 
 const RowFlex = styled.div`
@@ -44,8 +46,10 @@ export default function Publish() {
     const [publishing, setPublishing] = useState(false);
     const [published, setPublished] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [publishError, setPublishError] = useState({ error: false, msg: '' });
 
     const [hasError, setError] = useState(Array(8).fill(false));
+    const [imageUrl, setImageUrl] = useState('');
     
 
     // const hasError = useSelector((state) => state.publishError);
@@ -53,26 +57,28 @@ export default function Publish() {
     function onPublish() {
 
         const payload = {
-            name,
+            title:name,
             synopsis,
             language,
-            dimension,
-            runTime,
+            type:dimension,
+            runtime:runTime,
             genre,
             locations,
-            theatres
+            theatres,
+            image:imageUrl
         }
         setPublishing(true);
-        // if (!hasError.includes(true)) {
+        if (!hasError.includes(true)) {
             console.log(payload);
              // suceess 
             setLoading(true);
-            setTimeout(() => {
-                setLoading(false);
+            publishMovie(payload).then(_response => {
                 setPublished(true);
-            }, 500);
-           
-        // }
+            }).catch(_error => {
+                setPublishError({ error: true, msg: 'Something went wrong. Please try again.' });
+            })
+            setLoading(false);
+        }
        
     }
 
@@ -85,6 +91,7 @@ export default function Publish() {
 
     function handlePublishNew() {
         setPublished(false);
+        setPublishError(false);
         setPublishing(false);
         setName('');
         setSynopsis('');
@@ -104,8 +111,9 @@ export default function Publish() {
             <Chips options={dimensions} submitFlag={publishing} required hasError={(eb)=>handleFormError(eb,3)} onChange={(val)=>setDimension(val)} />
             <TextArea label="Run Time"  submitFlag={publishing} hasError={(eb)=>handleFormError(eb,4)} value={runTime} format="hhmm" required onChange={(val)=>setRuntime(val)}/>
             <TextArea label="Genre" submitFlag={publishing} hasError={(eb)=>handleFormError(eb,5)} value={genre} multiline  onChange={(val)=>setGenre(val)}/>
-            <AutoComplete required submitFlag={publishing} hasError={(eb)=>handleFormError(eb,6)}  label="Locations" value={locations} options={top100Films} multiple={true} onChange={(val)=>setLocations(val)} />
-            <AutoComplete required submitFlag={publishing} hasError={(eb)=>handleFormError(eb,7)} label="Theatres" value={theatres} options={top100Films} multiple={true} onChange={(val)=>setTheatres(val)} />
+            <AutoComplete required submitFlag={publishing} hasError={(eb)=>handleFormError(eb,6)}  label="Locations" value={locations} options={popularLocations} multiple={true} onChange={(val)=>setLocations(val)} />
+            <AutoComplete required submitFlag={publishing} hasError={(eb) => handleFormError(eb, 7)} label="Theatres" value={theatres} options={theatreChains} multiple={true} onChange={(val) => setTheatres(val)} />
+            <UploadImage OnUpload={(dataUrl)=>setImageUrl(dataUrl)}></UploadImage>
             <FormElement justifyContent="flex-end">
                 <Button label="Publish" position="end" onClick={onPublish}/>
             </FormElement>
@@ -113,7 +121,17 @@ export default function Publish() {
         )
     }
 
-    if (loading) return <Spinner loading={loading} color={'white'}/> 
+    if (loading) return <Spinner loading={loading} color={'white'} /> 
+    
+    if (publishError.error) {
+        return (
+            <AnimateContainer fullWidth>
+                <Confirmation message={publishError.msg}>
+                    <Button label="Try Again" onClick={()=>handlePublishNew()}/>
+                </Confirmation>
+            </AnimateContainer>
+        ) 
+    }
     
     if (published) {
         return (

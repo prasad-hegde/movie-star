@@ -158,6 +158,14 @@ export const movieList = [
   { id:'22',title: 'title12', genre: 'drama' },
 ]
 
+
+export const theatreChains = [{ title: 'AMC Entertainment' },
+  { title: 'Cinema Entertainment Corporation' },
+  { title: 'Cinemark Theatres' },
+  {title:'Fairchild Cinemas'}
+];
+
+export const popularLocations = [{ title: 'Chicago' }, { title: 'Indianapolis' }, { title: 'Bloomington' }, { title: 'Columbus' }];
 export const bannerList = [
   { image: banner1 },
   { image: banner2 },

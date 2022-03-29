@@ -1,11 +1,16 @@
 import { useEffect,useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { FormHelperText } from '@mui/material';
+import { CircularProgress, FormHelperText } from '@mui/material';
 import { FormElement } from '../../commonStyle';
 
 
-export default function AutoComplete({ options, label,multiple=false,value,onChange ,submitFlag=false,hasError=false,required=false}) {
+export default function AutoComplete(props) {
+
+  const { clearOnBlur, options, label, multiple = false,
+    value, onChange, submitFlag = false, hasError = false,
+    required = false, variant = 'outlined', freeSolo = false,loading=false,onInputChange=()=>'' } = props;
+  
   const [error, setError] = useState(false);
 
   function validate() {
@@ -43,10 +48,25 @@ export default function AutoComplete({ options, label,multiple=false,value,onCha
         autoComplete
         limitTags={4}
         onChange={(_event,value)=>onChange(value)}
-        renderInput={(params) => <TextField {...params} label={label} />}
+        renderInput={(params) =>
+          <TextField variant={variant}
+          {...params} label={label} 
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+         />}
         required={required}
         error={error}
-        onBlur={()=>validate()}
+        onBlur={() => validate()}
+        freeSolo={freeSolo}
+        clearOnBlur={clearOnBlur}
+        onInputChange={(_event,inputVal)=>onInputChange((inputVal))}
       />
       <FormHelperText error={error}>{error?'This is a required field':''}</FormHelperText>
     </FormElement>

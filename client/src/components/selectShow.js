@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dialog from '@mui/material/Dialog';
 import styled from "styled-components"
-import { movieDetails, showTime, theatres } from "../mock"
+import { showTime, theatreChains } from "../mock"
 import { colors } from "../pallette"
 import TicketCounter from "./TicketCounter";
 import { FormElement } from "../commonStyle";
 import Button from "./Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import { ACTIONS } from "../redux/actions";
+import useFetch from "../hooks/useFetch";
+import { getAmovie } from "../api";
+import Spinner from "./Spinner";
 
 const moment = require('moment');
 
@@ -88,9 +93,9 @@ function generateWeekDates() {
     const week = Array(7).fill(0);
     week.forEach((_, i) => {
         const newDate = moment().add(i, "days");
+        const fullDate = newDate.format('MM/DD/yyyy');
         const day = newDate.format('ddd');
         const date = newDate.format('DD');
-        const fullDate = newDate.format('mm-dd-yyyy');
         week[i] = {
             day,
             date,
@@ -107,14 +112,15 @@ export default function ShowSelection() {
     const [activeDateIndex, setDateIndex] = useState(0);
     const [open, setOpen] = useState(false);
     const [ticketCount, setTicketCount] = useState({});
-    const [total, setTotal] = useState({item:0,subTotal:0});
+    const [total, setTotal] = useState({ item: 0, subTotal: 0 });
 
     const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const params = useParams();
 
     function handleTicketShop(count) {
         let item = 0;
         let subTotal = 0;
-
         Object.keys(count).forEach(ticket => {
             subTotal += priceTable[ticket] * count[ticket];
             item += count[ticket];
@@ -123,6 +129,14 @@ export default function ShowSelection() {
         setTicketCount(count)
     }
 
+    function onConfirm() {
+        const payload = {
+            ticketCount,
+            total,
+        }
+        dispatch({ type: ACTIONS.SET_TICKET_COUNT, payload });
+        navigate(`/selectSeats/${total.item}`);
+    }
 
     const priceTable = {
         adult: 15,
@@ -130,18 +144,25 @@ export default function ShowSelection() {
         senior: 12,
     };
 
-    function handleShowSelect(venue,time) {
-        setOpen(true)
+    function handleShowSelect(venue, time) {
+        const payload = { movie_id: params.movieId, venue, time,date:week[activeDateIndex].fullDate };
+        dispatch({ type: ACTIONS.SET_SHOW_DETAILS,payload });
+        setOpen(true);
     }
+
+
+    const { data: movieDetails, loading, error } = useFetch(getAmovie(params.movieId));
+
+    if (loading) return <Spinner  color={'white'}></Spinner>;
 
     return (
         <Container>
             <MovieBanner>
-                    <Title>{movieDetails.name}</Title>
+                    <Title>{movieDetails.title}</Title>
                     <Details>
                         <Chip>{movieDetails.language}</Chip>
-                        <Chip>{movieDetails.dimension}</Chip>
-                        <Plain>{`${movieDetails.runTime} ☉ ${movieDetails.genre}`}</Plain>
+                        <Chip>{movieDetails.type}</Chip>
+                        <Plain>{`${movieDetails.runtime} ☉ ${movieDetails.genre}`}</Plain>
                     </Details>
             </MovieBanner>
             <FilterSection>
@@ -156,13 +177,13 @@ export default function ShowSelection() {
                 </Details>
             </FilterSection>
             <Section>
-                {theatres.map((venue, i) => (
+                {theatreChains.map((venue, i) => (
                     <BiList index={i}>
-                    <Title small>{venue}</Title>
+                    <Title small>{venue.title}</Title>
                     <Details>
                         {showTime.map((time, i) => (<TimeChip key={i}
                             style={{ cursor: 'pointer' }}
-                            onClick={() =>handleShowSelect(venue,time)}
+                            onClick={() =>handleShowSelect(venue.title,time)}
                             inActive>{time}</TimeChip>))}
                         </Details>
                         </BiList>
@@ -177,7 +198,7 @@ export default function ShowSelection() {
                         <Title small>{'$'+total.subTotal}</Title>
                     </TotlaWrap>
                     <FormElement justifyContent='flex-end'>
-                        <Button label="Select Seats" disabled={total.item<=0} position="end" onClick={()=>navigate(`/selectSeats/${total.item}`)}/>
+                        <Button label="Select Seats" disabled={total.item<=0} position="end" onClick={onConfirm}/>
                     </FormElement>
                 </Section>
             </Dialog>
