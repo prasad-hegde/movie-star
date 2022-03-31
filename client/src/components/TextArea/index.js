@@ -11,6 +11,11 @@ const textFormat = {
     required: {
         errorText:'This is a required field'
     },
+    email: {
+        isValid:(email) =>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email)
+              .toLowerCase()),
+        errorText:"Invalid format : e.g example@email.com"
+    },
     default: {
         isValid: () => true,
         errorText:''
@@ -21,6 +26,7 @@ const textFormat = {
 export default function TextArea(props) {
     const { label = "label",
         multiline = false, format = 'default',
+        type="text",
         required = false ,onChange,value, submitFlag,hasError} = props;
     
     const [error, setError] = useState(false);
@@ -74,6 +80,7 @@ export default function TextArea(props) {
             <TextField
                 fullWidth id="outlined-basic"
                 label={label} variant="outlined"
+                type={type}
                 maxRows={6}
                 value={value}
                 multiline={multiline}

@@ -10,9 +10,10 @@ const ColorButton = styled(MUIButton)(({ theme ,buttonColor}) => ({
     }
 }));
 
-export default function Button({label,onClick,disabled=false,color}) {
+export default function Button({ label, onClick, disabled = false, color, fullWidth }) {
+    console.log('disabled',disabled)
     return (
-        <ColorButton buttonColor={color} colordisabled={disabled} variant="contained" onClick={onClick}>
+        <ColorButton fullWidth={fullWidth} buttonColor={color}  disabled={disabled} variant="contained" onClick={onClick}>
             {label}
         </ColorButton>
     );

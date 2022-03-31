@@ -115,7 +115,7 @@ export default function Publish() {
             <AutoComplete required submitFlag={publishing} hasError={(eb) => handleFormError(eb, 7)} label="Theatres" value={theatres} options={theatreChains} multiple={true} onChange={(val) => setTheatres(val)} />
             <UploadImage OnUpload={(dataUrl)=>setImageUrl(dataUrl)}></UploadImage>
             <FormElement justifyContent="flex-end">
-                <Button label="Publish" position="end" onClick={onPublish}/>
+                    <Button label="Publish" position="end" disabled={hasError.find(item=>item)} onClick={onPublish}/>
             </FormElement>
         </FormWrap>
         )

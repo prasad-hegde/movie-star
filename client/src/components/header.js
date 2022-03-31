@@ -11,6 +11,8 @@ import AutoComplete from './AutoComplete';
 import Button from './Button';
 import { FormElement } from '../commonStyle';
 import { searchMovie } from '../api';
+import SignUp from './signup';
+import { Dialog } from '@mui/material';
 
 const LogContainer = styled.div`
 display:flex;
@@ -38,6 +40,7 @@ export default function Header() {
     const [location, setLocation] = useState(popularLocations[0].title);
     const [searchOptions, setSearchOptions] = useState([]);
     const [loadingSearch, setSearchLoading] = useState(false);
+    const [formOpen, setFormOpen] = useState(true);
     const dispatch = useDispatch();
     
     function onLocationChange(val) {
@@ -74,6 +77,9 @@ export default function Header() {
 
     return (
         <Container>
+            <Dialog onClose={() => setFormOpen(false)} open={formOpen}>
+                <SignUp/>
+            </Dialog>
             <LogContainer onClick={()=>navigate('/')}>
                 <Logo />
             </LogContainer>
@@ -92,7 +98,7 @@ export default function Header() {
                 ></SimpleSelect>
             </SelectWrap>
             <FormElement>
-                <Button label="Login" />
+                <Button onClick={()=>setFormOpen(true)} label="Login" />
            </FormElement>
             
         </Container>
