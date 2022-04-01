@@ -55,6 +55,7 @@ public class UserController {
         }
         newUser.setPassword(MD5Utils.inputPassToFormPass(newUser.getPassword()));
 //        newUser.setPassword(newUser.getPassword());
+        newUser.setRole("user");
         userRepository.save(newUser);
 //        return Status.SUCCESS;
         return ResponseEntity.ok("Success!");
