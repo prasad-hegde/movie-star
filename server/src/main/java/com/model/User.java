@@ -25,6 +25,7 @@ public class User {
     private @NotBlank String email;
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
+    private @NotBlank String role;
 
 
     public User(@NotBlank String firstname,
@@ -78,6 +79,14 @@ public class User {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+    
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
     
     @Override
