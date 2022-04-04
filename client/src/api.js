@@ -9,3 +9,7 @@ export const getAllMovies = () => `${domain}/movies/all`;
 export const searchMovie = (search) => axios.get(`${domain}/movies/findAll?keyword=${search}`);
 
 export const getAmovie = (id) => `${domain}/movies/${id}`;
+
+export const signup = (payload) => axios.post(`${domain}/users/register`, payload);
+
+export const login = (payload)=> axios.post(`${domain}/users/login`, payload);

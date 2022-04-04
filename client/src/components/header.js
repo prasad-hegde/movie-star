@@ -1,6 +1,7 @@
 // import { useState } from 'react';
+import { useDispatch } from 'react-redux'
+import {ReactSession} from 'react-client-session';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../assets/icons/logo';
@@ -8,11 +9,12 @@ import { popularLocations } from '../mock';
 import { ACTIONS } from '../redux/actions';
 import SimpleSelect from './Select';
 import AutoComplete from './AutoComplete';
-import Button from './Button';
 import { FormElement } from '../commonStyle';
 import { searchMovie } from '../api';
 import SignUp from './signup';
-import { Dialog } from '@mui/material';
+import { Dialog  } from '@mui/material';
+import Button from './Button';
+import ProfileMini from './ProfileMini';
 
 const LogContainer = styled.div`
 display:flex;
@@ -40,7 +42,8 @@ export default function Header() {
     const [location, setLocation] = useState(popularLocations[0].title);
     const [searchOptions, setSearchOptions] = useState([]);
     const [loadingSearch, setSearchLoading] = useState(false);
-    const [formOpen, setFormOpen] = useState(true);
+    const [formOpen, setFormOpen] = useState(!ReactSession.get('user')?.email);
+    const [user, setUser] = useState(ReactSession.get('user')?.email);
     const dispatch = useDispatch();
     
     function onLocationChange(val) {
@@ -75,10 +78,16 @@ export default function Header() {
         dispatch({ type: ACTIONS.SET_LOCATION, payload:location});
     },[location])
 
+    useEffect(() => {
+       setUser(ReactSession.get('user')?.email)
+    },[ReactSession.get('user')])
+
+   
+    
     return (
         <Container>
             <Dialog onClose={() => setFormOpen(false)} open={formOpen}>
-                <SignUp/>
+                <SignUp onComplete={()=>setFormOpen(false)}/>
             </Dialog>
             <LogContainer onClick={()=>navigate('/')}>
                 <Logo />
@@ -98,8 +107,11 @@ export default function Header() {
                 ></SimpleSelect>
             </SelectWrap>
             <FormElement>
-                <Button onClick={()=>setFormOpen(true)} label="Login" />
-           </FormElement>
+                {user ?
+                     <ProfileMini onLogout={()=>setUser(ReactSession.set('user',''))}></ProfileMini>:
+                <Button onClick={() => setFormOpen(true)} label="Login" />
+               }
+            </FormElement>
             
         </Container>
     );

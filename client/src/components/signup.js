@@ -1,7 +1,9 @@
-import { Dialog } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {ReactSession} from 'react-client-session';
+import { useDispatch } from "react-redux";
 import styled from "styled-components"
-import { FormElement } from "../commonStyle";
+import { login, signup } from "../api";
+import { FormElement, Link } from "../commonStyle";
 import { colors } from "../pallette";
 import Button from "./Button";
 import TextArea from "./TextArea";
@@ -24,31 +26,24 @@ display:flex;
 flex-direction:column;
 min-width:20vw;
 `
-const Link = styled.div`
-color:${colors.duskyPink};
-font-weight:700;
-padding:0 0.5rem;
-cursor:pointer;
-&:hover{
-text-decoration:underline;
-}
-`
 const Flex = styled.div`
 display:flex;
 justify-content:center;
 `
 
-export default function SignUp() {
+export default function SignUp({onComplete}) {
     // 0 - signIn 
     // 1 - signup
     
     const [mode, setMode] = useState(0);
-    const [name, setName] = useState('');
+    const [firstName, setFName] = useState('');
+    const [lastName, setLName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [formError, setFormError] = useState({ login: [0, 0], signup: [0, 0, 0], error: false });
     const [submit, setSubmit] = useState(false);
+    const dispatch = useDispatch();
 
     function handleFormError(err, index) {
         
@@ -68,12 +63,35 @@ export default function SignUp() {
     function onConfirm() {
         setSubmit(true);
         if (mode) {
-            if (!name || !email || !password) return;
-            alert(email + ':' + password + ':'+name);
+            const payload = {
+                firstname: firstName,
+                lastname: lastName,
+                email,
+                password,
+                mobilenumber:phone
+            }
+            signup(payload).then(res => {
+                console.log(res);
+            })
+            setMode(0);
         } else {
             // login
+            const payload = {
+                email,
+                password,
+            }
             if (!email || !password) return;
-            alert(email+':'+ password);
+            login(payload).then(res => {
+                console.log(res);
+                const userDetails = {
+                    firstname: 'prasad',
+                    lastname: 'hegde',
+                    email,
+                    mobilenumber:'12234'
+                }
+                ReactSession.set('user', userDetails);
+                onComplete();
+            })
         }
     }
 
@@ -88,7 +106,8 @@ export default function SignUp() {
                     </>
                 :
                     <>
-                        <TextArea submitFlag={submit} label="Name" hasError={(eb) => handleFormError(eb, 0)} value={name} required onChange={(val) => setName(val)} />
+                        <TextArea submitFlag={submit} label="First Name" hasError={(eb) => handleFormError(eb, 0)} value={firstName} required onChange={(val) => setFName(val)} />
+                        <TextArea submitFlag={submit} label="Last Name" hasError={(eb) => handleFormError(eb, 0)} value={lastName} required onChange={(val) => setLName(val)} />
                         <TextArea submitFlag={submit} label="Email" hasError={(eb) => handleFormError(eb, 0)} value={email} required format={'email'} onChange={(val) => setEmail(val)} />
                         <TextArea submitFlag={submit} label="Password" type="password" hasError={(eb) => handleFormError(eb, 1)} value={password} required onChange={(val) => setPassword(val)} />
                         <TextArea submitFlag={submit} label="Phone" hasError={(eb)=>handleFormError(eb,1)} value={phone} onChange={(val)=>setPhone(val)}/>
@@ -101,7 +120,7 @@ export default function SignUp() {
             </FormElement>
             <Flex>
                 {mode ? 'Already have an account?' : 'New to Movie-Star?'}
-                <Link onClick={() => setMode(!mode)}>{mode?'Login':'Create an account'}</Link></Flex>
+                <Link onClick={() => setMode(Number(!mode))}>{mode?'Login':'Create an account'}</Link></Flex>
         </Section>
     )
 }

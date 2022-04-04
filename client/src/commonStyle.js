@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./pallette";
 
 
 export const FormElement = styled.div`
@@ -17,4 +18,13 @@ border-radius: 0.5rem;
 box-shadow: 6px 8px 16px -5px black;
 background-image:url(${({ url }) => url});
 overflow:hidden;
+`
+export const Link = styled.div`
+color:${colors.duskyPink};
+font-weight:700;
+padding:0 0.5rem;
+cursor:pointer;
+&:hover{
+text-decoration:underline;
+}
 `

@@ -1,6 +1,7 @@
 
 import './App.css';
 import styled from 'styled-components';
+import {ReactSession} from 'react-client-session';
 import {Routes, Route} from "react-router-dom";
 import Dashboard from './views/dashboard';
 import Publish from './views/publish';
@@ -35,6 +36,7 @@ const darkTheme = createTheme({
   },
 });
 
+ReactSession.setStoreType("sessionStorage");
 
 function App() {
   return (
