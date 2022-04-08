@@ -3,6 +3,8 @@ package com.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,7 +66,8 @@ public class User {
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
-
+    
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

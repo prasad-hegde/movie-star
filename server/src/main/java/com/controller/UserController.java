@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +52,7 @@ public class UserController {
                 System.out.println("User Already exists!");
 //                return Status.USER_ALREADY_EXISTS;
               return ResponseEntity.ok("User Already Exists");
+              
             }
         }
         newUser.setPassword(MD5Utils.inputPassToFormPass(newUser.getPassword()));
@@ -63,8 +65,9 @@ public class UserController {
 	
 	@PostMapping("/users/login")
     @CrossOrigin
-    public ResponseEntity loginUser(@Valid @RequestBody User user) {
+    public ResponseEntity loginUser(@Valid @RequestBody User user , Model model) {
         List<User> users = userRepository.findAll();
+        
         String passwordU = MD5Utils.inputPassToFormPass(user.getPassword());// encrypt the password to compare
 //        String passwordU = user.getPassword();
         for (User other : users) {
@@ -73,7 +76,8 @@ public class UserController {
                     other.setLoggedIn(true);
                     userRepository.save(other);
 //                    return Status.USER_LOGGED_IN;
-                    return ResponseEntity.ok("User logged in successfully!");
+                    
+                   return ResponseEntity.ok(other);
                 }
             }
         }

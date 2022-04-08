@@ -40,7 +40,8 @@ public class MovieService {
             return movie.get();
         }
 		else{	
-			throw new MovieNotFoundException("Movie not found"); 
+			
+			throw new MovieNotFoundException("Movie not found");
 		}	 
         
     }
