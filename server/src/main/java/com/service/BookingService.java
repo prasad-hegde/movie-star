@@ -1,6 +1,8 @@
 package com.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +44,9 @@ public class BookingService {
         log.info("invoking repository to save the bookings");
         booking = bookingRepository.save(booking);
         Movie movie = movieService.getMovieById(bookingRequest.getMovieId());
-        User user = userService.getUserById(bookingRequest.getUserId());
+        User user = null;
+        if(userService.getUserById(bookingRequest.getUserId()) != null)
+        	userService.getUserById(bookingRequest.getUserId());
         return BookingOutput.builder().booking(booking).movie(movie).user(user).build();
     }
     
@@ -86,5 +90,35 @@ public class BookingService {
         });
         return bookingOutput;
     }
+    
+    //guest booking
+    public List<BookingOutput> getBookingByEmail(String email) throws MovieNotFoundException {
+        List<BookingOutput> bookingOutput = new ArrayList<>();
+        List<Booking> bookings = bookingRepository.findBookingByEmail(email);
+        bookings.forEach(booking -> {
+            Movie movie = movieService.getMovieById(booking.getMovieId());
+//            User user = userService.getUserByEmail(booking.getEmail());
+            bookingOutput.add(BookingOutput.builder().booking(booking).movie(movie).build());
+        });
+        return bookingOutput;
+    }
+    
+    public Booking getReservedSeats(Booking booking) {
+	
+    	Booking bookingOutput = bookingRepository.findReservedSeats(booking.getVenue(), booking.getMovieId() , booking.getShowTime());
+//    	String[] reserved = bookingOutput.getSeatNo();
+    	return bookingOutput;
+ 
+    }
+    
+   /* public Booking getReserved(String venue , String showTime ,Long movieId) {
+	
+    	System.out.print("input: "+venue+"showTime: "+showTime+"movieId: "+movieId);
+    	Booking bookingOutput = bookingRepository.findReservedSeats(venue, showTime, movieId);
+//    	String[] reserved = bookingOutput.getSeatNo();
+    	return bookingOutput;
+ 
+    }*/
+    
     
 }

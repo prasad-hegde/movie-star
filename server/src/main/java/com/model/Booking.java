@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,15 +42,22 @@ public class Booking {
 	@Column(name="user_id")
     private Long userId;
 	
-	@JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
+	@Column(name="email")
+	private String email;
+	
+//	@JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
+//	@Column(name="show_time")
+//    private LocalDateTime showTime;
+	
+	
 	@Column(name="show_time")
-    private LocalDateTime showTime;
+    private String showTime;
 	
 	@Column(name="seat_no")
 	private String[] seatNo;
 	
 	@Column(name="seat_type")
-	private String[] seatType;
+	private Integer[] seatType;
 	
 	@Column(name="total_price")
 	private BigDecimal totalPrice;
@@ -60,8 +68,8 @@ public class Booking {
 	@Column(name="seat_total")
 	private String seatTotal;
 	
-	@Column(name="theatre")
-	private String theatre;
+	@Column(name="location")
+	private String location;
 	
 	@CreationTimestamp
     @Column(name = "created_on")

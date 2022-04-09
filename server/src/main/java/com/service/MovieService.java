@@ -50,5 +50,6 @@ public class MovieService {
     public List<Movie> listAllMovies() {
         return movieRepository.findAll();
     }
-
+    
+    
 }

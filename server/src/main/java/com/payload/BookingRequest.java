@@ -30,7 +30,7 @@ public class BookingRequest {
 	
 	private String[] seatNo;
 	private String[] seatType;
-	private LocalDateTime showTime;
+	private String showTime;
 	private Long userId;
 	private String venue;
 	private LocalDateTime createdOn;

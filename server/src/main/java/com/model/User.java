@@ -24,6 +24,7 @@ public class User {
     private long user_id;
     private @NotBlank String firstname;
     private @NotBlank String lastname;
+    
     private @NotBlank String email;
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
@@ -67,7 +68,7 @@ public class User {
         this.firstname = firstname;
     }
     
-    @JsonIgnore
+//    @JsonIgnore
     public String getPassword() {
         return password;
     }
