@@ -63,24 +63,29 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getBookingById(id));
     }
     
-    @GetMapping(value = "/booking/guest/{email}")
+    /*@GetMapping(value = "/booking/user/{email}")
     public ResponseEntity<List<BookingOutput>> getBookingGuest(@PathVariable("email") String email) {
         return ResponseEntity.ok(bookingService.getBookingByEmail(email));
-    }
+    }*/
     
+    @GetMapping(value = "/booking/user")
+    public ResponseEntity<List<BookingOutput>> getBookingUsingEmail(@Param("email") String email){
+    	
+    	return ResponseEntity.ok(bookingService.getBookingByEmail(email));
+    }
 
-    @GetMapping(value = "/booking/user/{user_id}")
+    /*@GetMapping(value = "/booking/user/{user_id}")
     public ResponseEntity<List<BookingOutput>> getBookingByUserId(@PathVariable("user_id") Long userId) {
         return ResponseEntity.ok(bookingService.getBookingByUserId(userId));
-    }
+    }*/
     
     
     //get reserved seats at a theatre
     @PostMapping(value= "/booking/reserved" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Booking getSeatsReserved(@RequestBody Booking booking){
+    public List<Booking> getSeatsReserved(@RequestBody Booking booking){
     	
     	
-    	Booking booking1 = bookingService.getReservedSeats(booking);
+    	List<Booking> booking1 = bookingService.getReservedSeats(booking);
     	
     	return booking1;
     	

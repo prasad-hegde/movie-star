@@ -103,9 +103,9 @@ public class BookingService {
         return bookingOutput;
     }
     
-    public Booking getReservedSeats(Booking booking) {
+    public List<Booking> getReservedSeats(Booking booking) {
 	
-    	Booking bookingOutput = bookingRepository.findReservedSeats(booking.getVenue(), booking.getMovieId() , booking.getShowTime());
+    	List<Booking> bookingOutput = bookingRepository.findReservedSeats(booking.getVenue(), booking.getMovieId() , booking.getShowTime() , booking.getLocation());
 //    	String[] reserved = bookingOutput.getSeatNo();
     	return bookingOutput;
  

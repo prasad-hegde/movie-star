@@ -20,8 +20,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 	
 	
 //	@Query("SELECT b FROM Booking b WHERE b.venue = :venue AND b.movieId = :movieId")
-	@Query(value = "SELECT * FROM Booking b WHERE b.venue = ?1 AND b.movie_id = ?2 AND b.show_time = ?3", nativeQuery = true)
-	Booking findReservedSeats(String venue , Long movieId , String showTime);
+	@Query(value = "SELECT * FROM Booking b WHERE b.venue = ?1 AND b.movie_id = ?2 AND b.show_time = ?3 AND b.location = ?4", nativeQuery = true)
+	List<Booking> findReservedSeats(String venue , Long movieId , String showTime , String location);
 	
 	
 }
