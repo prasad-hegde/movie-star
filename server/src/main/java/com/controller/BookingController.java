@@ -46,10 +46,11 @@ public class BookingController {
             value = "/createBooking",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Status createBooking(@Valid @RequestBody Booking booking) throws IOException{
+    public Booking createBooking(@Valid @RequestBody Booking booking) throws IOException{
         
     	bookingService.saveBooking(booking);
-		return Status.SUCCESS;
+//		return Status.SUCCESS;
+    	return booking;
     }
     
     
