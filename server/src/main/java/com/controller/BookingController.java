@@ -64,6 +64,7 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getBookingById(id));
     }
     
+    
     /*@GetMapping(value = "/booking/user/{email}")
     public ResponseEntity<List<BookingOutput>> getBookingGuest(@PathVariable("email") String email) {
         return ResponseEntity.ok(bookingService.getBookingByEmail(email));

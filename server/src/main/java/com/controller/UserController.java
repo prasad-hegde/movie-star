@@ -125,6 +125,7 @@ public class UserController {
 	    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
 	        return ResponseEntity.ok(userService.getUserByEmail(email));
 	 }
+	 
 	
 	@PostMapping("/users/password")
 	@CrossOrigin

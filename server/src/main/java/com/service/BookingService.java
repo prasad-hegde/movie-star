@@ -73,8 +73,8 @@ public class BookingService {
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
             Movie movie = movieService.getMovieById(booking.getMovieId());
-            User user = userService.getUserById(booking.getUserId());
-            return BookingOutput.builder().booking(booking).movie(movie).user(user).build();
+//            User user = userService.getUserById(booking.getUserId());
+            return BookingOutput.builder().booking(booking).movie(movie).build();
         } else {
             throw new MovieNotFoundException("Booking Id not found");
         }
@@ -90,6 +90,8 @@ public class BookingService {
         });
         return bookingOutput;
     }
+    
+    
     
     //guest booking
     public List<BookingOutput> getBookingByEmail(String email) throws MovieNotFoundException {
