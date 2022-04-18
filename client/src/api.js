@@ -12,4 +12,9 @@ export const getAmovie = (id) => `${domain}/movies/${id}`;
 
 export const signup = (payload) => axios.post(`${domain}/users/register`, payload);
 
-export const login = (payload)=> axios.post(`${domain}/users/login`, payload);
+export const login = (payload) => axios.post(`${domain}/users/login`, payload);
+
+
+export const book = (payload) => axios.post(`${domain}/createBooking`, payload);
+
+export const fetchBooking = (email) => `${domain}/booking/user?email=${email}`;

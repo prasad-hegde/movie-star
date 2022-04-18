@@ -108,9 +108,9 @@ export default function Header() {
             </SelectWrap>
             <FormElement>
                 {user ?
-                     <ProfileMini onLogout={()=>setUser(ReactSession.set('user',''))}></ProfileMini>:
+                    <ProfileMini onLogout={()=>setUser(ReactSession.set('user',''))}></ProfileMini>:
                 <Button onClick={() => setFormOpen(true)} label="Login" />
-               }
+            }
             </FormElement>
             
         </Container>

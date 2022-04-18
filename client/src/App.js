@@ -15,6 +15,9 @@ import SeatLayoutPage from './views/seatLayout';
 import Error from './components/Error';
 import store from './redux/store';
 import BookingSummary from './views/bookingSummary';
+import Profile from './components/profile';
+import ErrorBoundary from './components/ErrorBoundary'
+import Payment from './components/Payment';
 
 const Container = styled.div`
 display:flex;
@@ -42,16 +45,20 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <Provider store={store}>
+        <ErrorBoundary>
         <Container>
             <Header />
             <ScrollContainer>
               <WorkSpace>
-                <Routes>
+              <Routes>
+                  <Route path="/profile" element={<Profile />}/>
                   <Route path="/publish" element={<Publish />}/>
                   <Route path="/support" element={<Support />}/>
                   <Route path="/onsite" element={<Onsite />} />
+                  <Route path="/payment/:amount" element={<Payment/>}/>
+                  <Route path={"/book"} element={<BookingSummary/>}/>
                   <Route path={`/selectSeats/:count`} element={<SeatLayoutPage />} />
-                  <Route path={'/book'} element={<BookingSummary/>}/>
+                  
                   <Route path="/" element={<Dashboard />} />
                   <Route path='/play' element={<Error/>}></Route>
                   <Route
@@ -61,8 +68,8 @@ function App() {
                   </Routes>
               </WorkSpace>
             </ScrollContainer>
-          
-        </Container>
+          </Container>
+        </ErrorBoundary>
       </Provider>
   </ThemeProvider>
   );

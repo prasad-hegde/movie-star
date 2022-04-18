@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components"
 import { login, signup } from "../api";
 import { FormElement, Link } from "../commonStyle";
-import { colors } from "../pallette";
 import Button from "./Button";
 import TextArea from "./TextArea";
 
@@ -84,8 +83,8 @@ export default function SignUp({onComplete}) {
             login(payload).then(res => {
                 console.log(res);
                 const userDetails = {
-                    firstname: 'prasad',
-                    lastname: 'hegde',
+                    firstname: firstName,
+                    lastname: lastName,
                     email,
                     mobilenumber:'12234'
                 }
