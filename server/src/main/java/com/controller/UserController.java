@@ -1,12 +1,16 @@
 package com.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONString;
 
 import com.model.PasswordReset;
 import com.model.User;
@@ -48,9 +57,10 @@ public class UserController {
         
         for (User user : users) {      
             if (user.getEmail().equalsIgnoreCase(newUser.getEmail())) {
-                System.out.println("User Already exists!");
+//                System.out.println("User Already exists!");
 //                return Status.USER_ALREADY_EXISTS;
               return ResponseEntity.ok("User Already Exists");
+              
             }
         }
         newUser.setPassword(MD5Utils.inputPassToFormPass(newUser.getPassword()));
@@ -61,39 +71,50 @@ public class UserController {
         return ResponseEntity.ok("Success!");
 	}
 	
+	
 	@PostMapping("/users/login")
     @CrossOrigin
-    public ResponseEntity loginUser(@Valid @RequestBody User user) {
-        List<User> users = userRepository.findAll();
+    public ResponseEntity login(@Valid @RequestBody User user , Model model) {
+		
+		List<User> users = userRepository.findAll();
         String passwordU = MD5Utils.inputPassToFormPass(user.getPassword());// encrypt the password to compare
 //        String passwordU = user.getPassword();
-        for (User other : users) {
-            if (other.getEmail().equals(user.getEmail())) {
-                if(other.getPassword().equals(passwordU)) {
-                    other.setLoggedIn(true);
-                    userRepository.save(other);
-//                    return Status.USER_LOGGED_IN;
-                    return ResponseEntity.ok("User logged in successfully!");
-                }
-            }
-        }
-//        return Status.FAILURE;
-        return ResponseEntity.ok("Please check your credentials");
+        
+           for (User other : users) {
+	            if (other.getEmail().equals(user.getEmail())) { 
+	            	
+	                if(other.getPassword().equals(passwordU)) {
+	                	
+//	                	System.out.print("other.getPassword()-> "+other.getPassword()+"user.getPassword()-> "+passwordU);
+	                    other.setLoggedIn(true);
+	                    userRepository.save(other);   
+	                    return ResponseEntity.ok(other);
+	                
+	                }
+	            }
+	        }
+           
+           JSONObject error = new JSONObject();
+           error.put("errorMessage", "Check your credentials");
+           return new ResponseEntity(error.toMap(), HttpStatus.OK); 
 	}
+	
 	
 	@PostMapping("/users/logout")
     @CrossOrigin
     public ResponseEntity logUserOut(@Valid @RequestBody User user) {
-        List<User> users = userRepository.findAll();
+        
+		List<User> users = userRepository.findAll();
 
         for (User other : users) {
-            if (other.equals(user)) {
+            if (other.getEmail().equals(user.getEmail())) {
                 user.setLoggedIn(false);
                 userRepository.save(user);
                 return ResponseEntity.ok("Logout successful!");
 //                return Status.SUCCESS;
             }
         }
+        
         return ResponseEntity.ok("Logout unsuccessful!");
 //        return Status.FAILURE;
     }
@@ -104,6 +125,7 @@ public class UserController {
 	    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
 	        return ResponseEntity.ok(userService.getUserByEmail(email));
 	 }
+	 
 	
 	@PostMapping("/users/password")
 	@CrossOrigin

@@ -53,7 +53,7 @@ public class Movie {
     
     @Column(name="theatres" , length = 200)
     private String[] theatres;
-//        private String theatres;
+//  private String theatres;
     
     @Column(name="image" , length = 10485760 , nullable = true)
     private String image;

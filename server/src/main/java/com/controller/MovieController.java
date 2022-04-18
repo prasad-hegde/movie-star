@@ -42,7 +42,7 @@ public class MovieController {
 	// publish movies
 	@PostMapping(value = "/publish")
 	public Status addMovie(@Valid @RequestBody Movie movie) throws IOException {
-		System.out.print("inside publish movie");
+		
 		movieService.saveMovie(movie);
 		return Status.SUCCESS;
 	}
