@@ -46,18 +46,26 @@ public class Movie {
     private String genre;
     
     
-    @Column(name="locations" , length = 200)
-    private String[] locations;
+    @ElementCollection
+    private List<String> locations;
+    
+    @ElementCollection
+    private List<String> theatre;
+   
+    
+//    @Column(name="locations" , length = 200)
+//    private String[] locations;
 //    private String locations;
     
     
-    @Column(name="theatres" , length = 200)
-    private String[] theatres;
+//    @Column(name="theatres" , length = 200)
+//    private String[] theatres;
 //  private String theatres;
     
     @Column(name="image" , length = 10485760 , nullable = true)
     private String image;
     
+    /*
     public String[] getLocations() {
         return locations;
     }
@@ -74,7 +82,7 @@ public class Movie {
 
     public void setTheatres(String[] theatres) {
         this.theatres = theatres;
-    }
+    }*/
     
     public String getImage() {
         return image;
