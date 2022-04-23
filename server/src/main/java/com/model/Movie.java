@@ -1,9 +1,5 @@
 package com.model;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -49,8 +45,9 @@ public class Movie {
     @ElementCollection
     private List<String> locations;
     
+    
     @ElementCollection
-    private List<String> theatre;
+    private List<String> theatres;
    
     
 //    @Column(name="locations" , length = 200)
