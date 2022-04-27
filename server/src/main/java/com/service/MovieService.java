@@ -1,5 +1,6 @@
 package com.service;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,16 @@ public class MovieService {
         
     }
    
+    public List<Movie> filterMoviesByLocation(String locations){
+    	
+    	List<Movie> movieList = new ArrayList<>();
+    	
+    	
+    	movieList = movieRepository.findByLocation(locations);
+		return movieList;
+    	 	
+    }
+    
  
     public List<Movie> listAllMovies() {
         return movieRepository.findAll();

@@ -70,5 +70,11 @@ public class MovieController {
     public ResponseEntity getEventById(@PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
-
+	
+	//filter movies using location
+	@GetMapping(value = "/filterLocation")
+    public ResponseEntity getMoviesByLocation(@Param("location") String location) throws Exception {
+        return ResponseEntity.ok(movieService.filterMoviesByLocation(location));
+    }
+	
 }

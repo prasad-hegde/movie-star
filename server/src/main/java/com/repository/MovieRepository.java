@@ -17,10 +17,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long>{
 	 * " OR e.zip_code LIKE %?1%" + " OR e.location_name LIKE %?1%"
 	 */
     )
-	
-	
     public List<Movie> search(String keyword);
 	
+//	@Query(nativeQuery = true, value = "select * from movies where :location IN locations")
+	@Query("SELECT m FROM Movie m WHERE :location in elements(m.locations)")
+	public List<Movie> findByLocation(String location);
 	
 
 }
