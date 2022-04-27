@@ -11,6 +11,8 @@ import Spinner from "../components/Spinner";
 import Fade from '@mui/material/Fade';
 import { publishMovie } from "../api";
 import UploadImage from "../components/UploadImage";
+import useRole from "../hooks/useRole";
+import { useNavigate } from "react-router-dom";
 
 
 const RowFlex = styled.div`
@@ -51,6 +53,9 @@ export default function Publish() {
     const [hasError, setError] = useState(Array(8).fill(false));
     const [imageUrl, setImageUrl] = useState('');
     
+    const navigate = useNavigate();
+
+    const role = useRole();
 
     // const hasError = useSelector((state) => state.publishError);
 
@@ -122,6 +127,15 @@ export default function Publish() {
     }
 
     if (loading) return <Spinner loading={loading} color={'white'} /> 
+
+    if (role!=='admin') {
+        return (
+            <Confirmation error message="Unauthorised">
+                <FormElement>
+                    <Button label={'Go to Dashboard'} onClick={()=>navigate('/')}></Button>
+                </FormElement>
+            </Confirmation>)
+    }
     
     if (publishError.error) {
         return (

@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import styled from "styled-components"
-import { book } from "../api";
+import { book, fetchBooking } from "../api";
 import { FormElement } from "../commonStyle";
 import Button from "../components/Button";
 import { colors } from "../pallette";
@@ -13,6 +13,9 @@ import Confirmation from "./confirmation";
 import Spinner from "../components/Spinner";
 import Ticket from "../components/Ticket";
 import Payment from "../components/Payment"
+import { sendEmail } from "../utils";
+import { ACTIONS } from "../redux/actions";
+import useFetch from "../hooks/useFetch";
 
 
 const Container = styled.div`
@@ -55,11 +58,39 @@ export default function BookingSummary() {
     const [loading, setLoading] = useState(false);
     const [showTicket, setShowTicket] = useState(false);
     const [showPayment, setShowPayment] = useState(false);
+    const [ticketDetails, setTicketDetails] = useState('');
+    const [discount, setDiscount] = useState(0);
+    const [promo, setPromo] = useState('');
+    const [promoDisabled, setPromoDisable] = useState(false);
+    const { data: bookingHistory, loading: userStatusLoading, error } = useFetch(fetchBooking(userDetails?.email));
+    const [promoError, setPromoError] = useState(false);
+
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
  
+    function handleCheckout() {
+        const payload = { ...ticketCount, total: {...ticketCount.total,subTotal:ticketCount?.total?.subTotal-discount}};
+        dispatch({ type: ACTIONS.SET_TICKET_COUNT, payload });
+        setShowPayment(true);
+    }
 
 
+    function validatePromo() {
+        if (promo?.toLocaleLowerCase() == 'newuser' && bookingHistory.length<=0) {
+            setDiscount(ticketCount?.total?.subTotal * 0.15);
+            setPromoDisable(true)
+        } else {
+            setPromoError(true);
+            setPromo('');
+        }
+        //clear
+        if(promoDisabled){
+            setDiscount(0);
+            setPromo('');
+            setPromoDisable(!promoDisabled);
+        }
+    }
     window.addEventListener("storage",(_e) => {
         setCheckoutState(!userDetails?.email);
      });
@@ -73,7 +104,7 @@ export default function BookingSummary() {
             totalPrice:ticketCount?.total?.subTotal,
             seatNo: seatDetails,
             seatType:[adult,child,senior],
-            showTime: dateTime.format('MM-DD-YYYY hh:mm:ss'),
+            showTime: dateTime.format('MM-DD-YYYY HH:mm:ss'),
             userId: '',
             email:userDetails?.email || guestEmail,
             venue: showDetails?.venue,
@@ -82,48 +113,24 @@ export default function BookingSummary() {
         }
         setLoading(true);
         book(payload).then(res => {
+            if (res) {
+                if (res.data) {
+                    setTicketDetails(res.data);
+                }
+            }
             setBookingError(false);
             setShowConfrimation(true);
             setShowPayment(false);
+            sendEmail({ email: userDetails.email, name: userDetails.firstname + ' ' + userDetails.lastname },{...res.data,movieName:showDetails.title})().then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
         }).catch(e =>
             {setShowConfrimation(true);
             setBookingError(true)});
         setLoading(false);
     }
-
-    const Summary=() => (
-        <Container>
-            <Title>Booking Summary</Title>
-            <Item>
-                <Text>Seats</Text>
-                <Text>{seatDetails.join(', ')}</Text>
-            </Item>
-            <Item>
-                <Text>Venue</Text>
-                <Text>{showDetails.venue}</Text>
-            </Item>
-            <Item>
-                <Text>{'Time & Date'}</Text>
-                <Text>{showDetails.date+' '+showDetails.time}</Text>
-            </Item>
-            {Object.keys(ticketCount?.ticketCount).map(item => (
-                <Item>
-                    <Text>{item}</Text>
-                    <Text>{ticketCount?.ticketCount[item]}</Text>
-                </Item>
-            ))}
-            <Item bordered>
-                <Text>{`Total (${ticketCount?.total?.item})`}</Text>
-                <Text>{ticketCount?.total?.subTotal+'$'}</Text>
-            </Item>
-            {!userDetails?.email && <TextArea label="Email" hasError={(eb) => handleFormError(eb, 0)} value={guestEmail} required format={'email'} onChange={(val) => setGuestEmail(val)} />}
-            
-            <FormElement justifyContent='end'>
-                <Button fullWidth={true} disabled={checkoutState} label={'Checkout'} position="center" onClick={()=>setShowPayment(true)}/>
-            </FormElement>
-
-        </Container>
-    )
 
     function handleFormError(error) {
         setCheckoutState(error);
@@ -150,11 +157,11 @@ export default function BookingSummary() {
 
     if (showTicket) {
         return (
-                <Ticket email={userDetails?.email || guestEmail}></Ticket>
+                <Ticket bookingId={ticketDetails?.bookingId}></Ticket>
         )
     }
     if (showPayment) {
-        return (<Payment amount={ticketCount?.total?.subTotal} onPayment={onPayment} />);
+        return (<Payment allowCash={userDetails?.role==='support'} amount={ticketCount?.total?.subTotal} onPayment={onPayment} />);
     }
 
     return (
@@ -164,7 +171,54 @@ export default function BookingSummary() {
                 <Button fullWidth={true} disabled={checkoutState} label={bookingError?'Try Again':'View Ticket'} position="center" onClick={afterConfirm}/>
             </FormElement>
             </Confirmation> :
-            <Summary />
+            (<Container>
+            <Title>Booking Summary</Title>
+            <Item>
+                <Text>Seats</Text>
+                <Text>{seatDetails.join(', ')}</Text>
+            </Item>
+            <Item>
+                <Text>Venue</Text>
+                <Text>{showDetails.venue}</Text>
+            </Item>
+            <Item>
+                <Text>{'Time & Date'}</Text>
+                <Text>{showDetails.date+' '+showDetails.time}</Text>
+            </Item>
+            {Object.keys(ticketCount?.ticketCount).map(item => (
+                <Item>
+                    <Text>{item}</Text>
+                    <Text>{ticketCount?.ticketCount[item]}</Text>
+                </Item>
+            ))}
+            <Item>
+                <Text>{'Sub-Total'}</Text>
+                <Text>{ticketCount?.total?.subTotal+'$'}</Text>
+            </Item>
+            {discount>0 &&
+                <Item>
+                    <Text>{'Discount'}</Text>
+                    <Text>{'-'+discount}</Text>
+                </Item>
+            }
+            <Item bordered>
+                <Text>{`Total (${ticketCount?.total?.item})`}</Text>
+                <Text>{ticketCount?.total?.subTotal-discount+'$'}</Text>
+            </Item>
+            {!userDetails?.email && <TextArea label="Email" hasError={(eb) => handleFormError(eb, 0)} value={guestEmail} required format={'email'} onChange={(val) => setGuestEmail(val)} />}
+            {/* <FormElement justifyContent='space-between'> */}
+                <TextArea disabled={promoDisabled} onChange={(val) => setPromo(val)} value={promo} label="Promo Code" hasError={(eb) => ''}></TextArea>
+                {promoError&&<Text>Invalid Promo Code</Text>}
+                <FormElement justifyContent='flex-end'>
+                    <Button  label={promoDisabled?'Remove':'Apply'} position="center" onClick={() => validatePromo()} />
+                </FormElement>
+            {/* </FormElement> */}
+            <FormElement  justifyContent='end'>
+                <Button fullWidth={true} disabled={checkoutState} label={'Checkout'} position="center" onClick={()=>handleCheckout()}/>
+            </FormElement>
+
+        </Container>
+    )
             }
         </>
     )

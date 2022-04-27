@@ -183,6 +183,7 @@ export default styled.div`
     }
   }
   button {
+    cursor:pointer;
     margin: 0 10px;
     &[type='submit'] {
       ${btnPrimary};

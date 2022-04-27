@@ -39,8 +39,7 @@ padding:2rem;
 `
 export default function Profile() {
 
-    const userDetails=ReactSession.get('user');
-    console.log(userDetails);
+    const userDetails = ReactSession.get('user');
     return (
         <Container>
             <Header>

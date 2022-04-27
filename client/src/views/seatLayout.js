@@ -1,12 +1,17 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import SeatIcon from "../assets/icons/seat"
 import Button from "../components/Button"
 import {colors} from "../pallette"
 import { fromAlphNum } from "../utils"
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import { ACTIONS } from "../redux/actions"
+import { getReservedSeats } from "../api"
+import Spinner from "../components/Spinner"
+
+const moment = require('moment');
+
 
 const Canvas = styled.div`
 width:100%;
@@ -172,6 +177,32 @@ function SeatLayout({reserved}) {
 }
 
 export default function SeatLayoutPage() {
-    const reserved = ['A8', 'A9', 'A10'];
+    const [reserved, setReserved] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const state = useSelector(state => state);
+
+    useEffect(() => {
+        setLoading(true);
+        const payload = {
+        "venue": state?.showDetails?.venue,
+        "showTime":moment(state?.showDetails?.date + ' ' + state?.showDetails?.time, 'MM/DD/YYYY hh:mm A').format('MM-DD-YYYY HH:mm:ss'),
+        "movieId":state?.showDetails?.movie_id,
+        "location":state?.location
+        }
+        getReservedSeats(payload).then(res => {
+            const resrvd = [];
+            if (res.data&&res.data.length>0) {
+                res.data.forEach(booking => {
+                    resrvd.push(...booking.seatNo);
+               })
+            }
+            setReserved(resrvd);
+        })
+        setTimeout(() => setLoading(false), 1000);
+        
+    }, [])
+    if (loading) {
+        return(<Spinner loading={loading} color={'white'} />)
+    }
     return (<Canvas><SeatLayout reserved={reserved}/></Canvas>)
 }

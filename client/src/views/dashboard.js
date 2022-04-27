@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { getAllMovies } from "../api";
 import Carousel from "../components/Carousel";
+import Footer from "../components/footer";
 import MoviePreview from "../components/movieDetails";
 import MovieList from "../components/movieList";
 import ShowSelection from "../components/selectShow";
@@ -11,7 +13,9 @@ import { bannerList } from "../mock";
 
 export default function Dashboard() {
 
-    const { data: movieList, loading:moviesLoading, error:moviesError } = useFetch(getAllMovies());
+    const state = useSelector((state) => state);
+
+    const { data: movieList, loading:moviesLoading, error:moviesError } = useFetch(getAllMovies(state?.location),[state?.location]);
     return (
         <Routes>
             <Route
@@ -27,6 +31,7 @@ export default function Dashboard() {
                 element={ <>
                     <Carousel options={bannerList} ></Carousel>
                     <MovieList list={movieList} loading={moviesLoading} error={moviesError}></MovieList>
+                    <Footer></Footer>
                 </>}
             />
         </Routes>

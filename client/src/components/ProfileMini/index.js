@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "../../commonStyle";
 import { colors } from "../../pallette";
+import useRole from "../../hooks/useRole";
 
 const Container = styled.div`
 display:flex;
@@ -51,12 +52,15 @@ text-align: center;`
 
 export default function ProfileMini({onLogout }) {
     const [popupActive, setPopup] = useState(false);
+    const myRole = useRole();
     const navigate = useNavigate();
     document.body.addEventListener('click',()=> setPopup(false), true); 
     return (<Container>
         <IconWrap>
             <Icon style={{cursor:'pointer'}} component={AccountBoxIcon} fontSize="large" onClick={() => setPopup(!popupActive)} />
             <Popup visible={popupActive}>
+                {myRole === 'admin' && <SLink onClick={() => navigate('/publish')}>{'Publish Movies'}</SLink>}
+                {(myRole === 'support'||myRole === 'admin') && <SLink onClick={() => navigate('/support')}>{'Support Tools'}</SLink>}
                 <SLink onClick={() =>navigate('/profile')}>{'Profile & Bookings'}</SLink>
                 <Button onClick={onLogout} label="Logout" />
             </Popup>

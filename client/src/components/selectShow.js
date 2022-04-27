@@ -144,8 +144,8 @@ export default function ShowSelection() {
         senior: 12,
     };
 
-    function handleShowSelect(venue, time) {
-        const payload = { movie_id: params.movieId, venue, time,date:week[activeDateIndex].fullDate };
+    function handleShowSelect(venue, time,title) {
+        const payload = { movie_id: params.movieId, venue, time,date:week[activeDateIndex].fullDate,title };
         dispatch({ type: ACTIONS.SET_SHOW_DETAILS,payload });
         setOpen(true);
     }
@@ -177,13 +177,13 @@ export default function ShowSelection() {
                 </Details>
             </FilterSection>
             <Section>
-                {theatreChains.map((venue, i) => (
+                {movieDetails?.theatres?.map((venue, i) => (
                     <BiList index={i}>
-                    <Title small>{venue.title}</Title>
+                    <Title small>{venue}</Title>
                     <Details>
                         {showTime.map((time, i) => (<TimeChip key={i}
                             style={{ cursor: 'pointer' }}
-                            onClick={() =>handleShowSelect(venue.title,time)}
+                            onClick={() =>handleShowSelect(venue,time,movieDetails.title)}
                             inActive>{time}</TimeChip>))}
                         </Details>
                         </BiList>

@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {ReactSession} from 'react-client-session';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,20 +39,26 @@ margin:0 1rem;
 `
 export default function Header() {
     let navigate = useNavigate();
-    const [location, setLocation] = useState(popularLocations[0].title);
+    const [location, setLocation] = useState(ReactSession.get('location')||popularLocations[0]?.title);
     const [searchOptions, setSearchOptions] = useState([]);
     const [loadingSearch, setSearchLoading] = useState(false);
     const [formOpen, setFormOpen] = useState(!ReactSession.get('user')?.email);
     const [user, setUser] = useState(ReactSession.get('user')?.email);
     const dispatch = useDispatch();
     
+    useEffect(() => {
+        if (!ReactSession.get('user')?.email) {
+            setFormOpen(true);
+        }
+    },[ReactSession.get('user')?.email])
     function onLocationChange(val) {
         setLocation(val);
     }
 
     function onSearchSelect(val) {
-        if (val) {
-            navigate(`/movies/${val}`);
+        const selectedMovie = searchOptions.find(item => item.title === val);
+        if (selectedMovie) {
+            navigate(`/movies/${selectedMovie.id}`);
         }
     }
     function handleSearch(val) {
@@ -75,14 +81,18 @@ export default function Header() {
     }
 
     useEffect(() => {
-        dispatch({ type: ACTIONS.SET_LOCATION, payload:location});
-    },[location])
+        dispatch({ type: ACTIONS.SET_LOCATION, payload: location });
+        ReactSession.set('location', location);
+    }, [location])
 
     useEffect(() => {
        setUser(ReactSession.get('user')?.email)
     },[ReactSession.get('user')])
 
-   
+    function handleLogout() {
+        setUser(ReactSession.set('user', ''));
+        navigate('/');
+   }
     
     return (
         <Container>
@@ -108,11 +118,10 @@ export default function Header() {
             </SelectWrap>
             <FormElement>
                 {user ?
-                    <ProfileMini onLogout={()=>setUser(ReactSession.set('user',''))}></ProfileMini>:
+                    <ProfileMini onLogout={()=>handleLogout()}></ProfileMini>:
                 <Button onClick={() => setFormOpen(true)} label="Login" />
             }
             </FormElement>
-            
         </Container>
     );
 }

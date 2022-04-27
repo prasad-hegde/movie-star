@@ -81,15 +81,18 @@ export default function SignUp({onComplete}) {
             }
             if (!email || !password) return;
             login(payload).then(res => {
-                console.log(res);
-                const userDetails = {
-                    firstname: firstName,
-                    lastname: lastName,
-                    email,
-                    mobilenumber:'12234'
+                if (res.data && res.data.email) {
+                    const { firstname, lastname, email,role } = res.data;
+                    const userDetails = {
+                        firstname,
+                        lastname,
+                        email,
+                        role,
+                        mobilenumber:''
+                    }
+                    ReactSession.set('user', userDetails);
+                    onComplete();
                 }
-                ReactSession.set('user', userDetails);
-                onComplete();
             })
         }
     }

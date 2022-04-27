@@ -40,6 +40,7 @@ const darkTheme = createTheme({
 });
 
 ReactSession.setStoreType("sessionStorage");
+const user=ReactSession.get("user");
 
 function App() {
   return (
@@ -65,7 +66,8 @@ function App() {
                     path="*"
                     element={<Dashboard to="/" />}
                   />
-                  </Routes>
+                </Routes>
+                {/* <ChatApp userId={user?.email}/> */}
               </WorkSpace>
             </ScrollContainer>
           </Container>

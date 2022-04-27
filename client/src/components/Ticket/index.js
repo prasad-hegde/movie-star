@@ -1,9 +1,10 @@
 import styled from "styled-components"
-import { fetchBooking } from "../../api"
+import {fetchBookingById } from "../../api"
 import useFetch from "../../hooks/useFetch"
 import Spinner from "../Spinner"
 import QRCode from "react-qr-code";
 import GenericPdfDownloader from "../downloadPDF";
+import Error from "../Error";
 
 
 const Container = styled.div`
@@ -59,11 +60,9 @@ background-image:linear-gradient(#112530,#11253008,#112530),url(${({ image }) =>
 `
 const moment = require('moment');
 
-export default function Ticket({email}) {
-//    const { movieDetails,showDetails={},TicketDetails={}
-    const { data: ticketData, loading, error } = useFetch(fetchBooking(email));
-    const thisTicket = ticketData[ticketData.length - 1];
-    console.log(ticketData)
+export default function Ticket({bookingId}) {
+    const { data: ticketData, loading, error } = useFetch(fetchBookingById(bookingId));
+    const thisTicket = ticketData;
 
     if (loading) {
         return(<Spinner loading={loading} color={'white'} />)
@@ -75,6 +74,12 @@ export default function Ticket({email}) {
     const time = moment(thisTicket?.booking?.showTime).format('MMMM Do YYYY, h:mm:ss a');
     const seats = thisTicket?.booking?.seatNo;
     const seatTotal = thisTicket?.booking?.seatTotal;
+
+    if (error) {
+        return (<Container id="ticket" >
+            <Error msg={'No Record Found'}></Error>
+        </Container>);
+    }
 
     return (
         <>

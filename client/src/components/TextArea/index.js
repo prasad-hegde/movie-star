@@ -26,7 +26,8 @@ const textFormat = {
 export default function TextArea(props) {
     const { label = "label",
         multiline = false, format = 'default',
-        type="text",
+        type = "text",
+        disabled = false,
         required = false ,onChange,value, submitFlag,hasError} = props;
     
     const [error, setError] = useState(false);
@@ -83,8 +84,10 @@ export default function TextArea(props) {
                 type={type}
                 maxRows={6}
                 value={value}
+                key="textField"
                 multiline={multiline}
                 error={error}
+                disabled={disabled}
                 helperText={helperText}
                 required={required}
                 onChange={(event=>handleOnChange(event.target.value))}

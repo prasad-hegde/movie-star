@@ -15,7 +15,7 @@ font-size: 2rem;
 background: ${colors.browny};
 padding: 1rem;
 `
-const Payment = ({ onPayment, amount }) => {
+const Payment = ({ onPayment, amount,allowCash }) => {
     
     const onSubmit = values => {
         onPayment(JSON.stringify(values, 0, 2))
@@ -73,7 +73,7 @@ const Payment = ({ onPayment, amount }) => {
                                 <Field
                                     name="cvc"
                                     component="input"
-                                    type="text"
+                                    type="password"
                                     pattern="\d{3,4}"
                                     placeholder="CVC"
                                     format={formatCVC}
@@ -83,7 +83,11 @@ const Payment = ({ onPayment, amount }) => {
                                 <button type="submit" disabled={submitting}>
                                     Make Payment
                                 </button>
+                                {allowCash&&<button type="submit" disabled={submitting}>
+                                    Record Cash Payment
+                                </button>}
                             </div>
+                            
                         </form>
                     )
                 }}

@@ -3,6 +3,7 @@ import banner1 from './assets/images/banner1.png';
 import banner2 from './assets/images/banner2.png';
 import banner3 from './assets/images/banner3.png';
 import banner4 from './assets/images/banner4.png';
+import banner6 from './assets/images/banner6.png';
 
 
 export const top100Films = [
@@ -168,6 +169,7 @@ export const theatreChains = [{ title: 'AMC Entertainment' },
 export const popularLocations = [{ title: 'Chicago' }, { title: 'Indianapolis' }, { title: 'Bloomington' }, { title: 'Columbus' }];
 export const bannerList = [
   { image: banner1 },
+  {image:banner6},
   { image: banner2 },
   { image: banner3 },
   {image:banner4},

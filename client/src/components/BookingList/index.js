@@ -1,8 +1,11 @@
+import { Dialog } from "@mui/material";
+import { useState } from "react";
 import styled from "styled-components";
 import { fetchBooking } from "../../api";
 import useFetch from "../../hooks/useFetch";
 import { colors } from "../../pallette";
 import Spinner from "../Spinner";
+import Ticket from "../Ticket";
 
 const moment = require('moment');
 
@@ -18,7 +21,9 @@ display:flex;
 flex-wrap: wrap;
 `
 
-const ListItem = styled(ColumnFlex)`
+const ListItem = styled.div`
+display:flex;
+flex-direction:column;
 margin: 1rem 0.5rem;
 position:relative;
 overflow:hidden;
@@ -59,12 +64,19 @@ font-size:.7rem;
 margin:.5rem 0;
 padding: 0 1rem;
 `
+const TicketWrap = styled.div`
+padding:1rem;
+text-align:center;
+min-width:30rem;
+min-height:50rem;
+`
 function getMinimalList(data) {
     const upcoming = [];
     const past = [];
     data.forEach(item => {
         const { movie, booking } = item;
         const ticket = {
+            bookingId:booking.bookingId,
             title: movie.title,
             poster: movie.image,
             location: booking.location,
@@ -82,32 +94,54 @@ function getMinimalList(data) {
 export default function BookingList({ email }) {
 
     const { data: ticketData, loading, error } = useFetch(fetchBooking(email));
+    const [openDialog, setOpenDialog] = useState(false);
+    const [bookingId, setBookingId] = useState('');
     
     if (loading) {
         return(<Spinner loading={loading} color={'white'} />)
     }
     const  { upcoming, past } = getMinimalList(ticketData);
 
-    return (
-        <Main>
+    function handleListItemClick(id) {
+        setBookingId(id);
+        setOpenDialog(true);
+    }
+    function UpcomingBookings() {
+        return (<>
             <Heading>Upcoming Bookings</Heading>
             <Container>
-                {upcoming.map(ticket => (<ListItem >
+                {upcoming.map(ticket => (<ListItem onClick={()=>handleListItemClick(ticket.bookingId)} >
                 <Backgrond img={ticket.poster}></Backgrond>
                 <Title>{ticket.title}</Title>
                 <SubText>{ticket.location+', '+ticket.venue}</SubText>
                 <SubText>{ticket.showTime}</SubText>
                 </ListItem>))}
             </Container>
-            <Heading>Past Bookings</Heading>
+        </>)
+    }
+    function PastBookings() {
+        return (<>
+        <Heading>Past Bookings</Heading>
             <Container>
-                {past.map(ticket => (<ListItem >
+                {past.map(ticket => (<ListItem onClick={()=>handleListItemClick(ticket.bookingId)} >
                 <Backgrond img={ticket.poster}></Backgrond>
                 <Title>{ticket.title}</Title>
                 <SubText>{ticket.location+', '+ticket.venue}</SubText>
                 <SubText>{ticket.showTime}</SubText>
                 </ListItem>))}
             </Container>
+        </>)
+    }
+
+    return (
+        <Main>
+            {upcoming?.length > 0 && <UpcomingBookings />}
+            {past?.length>0&&<PastBookings/>}
+            <Dialog onClose={() => setOpenDialog(false)} open={openDialog}>
+                <TicketWrap>
+                    <Ticket bookingId={bookingId}></Ticket>
+                </TicketWrap>
+            </Dialog>
         </Main>
     )
 
